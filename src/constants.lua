@@ -10,12 +10,13 @@ WINDOW_WIDTH = QUADX * BOARD_SIZE + GUI_SIZE + 30
 WINDOW_HEIGHT = QUADY * BOARD_SIZE
 
 -- Load spritesheet as a global variable
-ATLAS = Atlas('assets/basic_tiles_48x48x9__0_1.png', QUADX, QUADY)
+ATLAS = Atlas('assets/basic_tiles_48x48x9__0_2.png', QUADX, QUADY)
 ATLAS:setSheet()
 
 TILE_IDS = {
     ['covered'] = 7,
     ['grass'] = 1,
+    ['colonized'] = 2,
     ['tree'] = 5,
     ['carcass'] = 3,
     ['water'] = 6

@@ -9,6 +9,11 @@ function TheWood:init()
     self.gridHeight = WOOD_DATA['gridy']
 
     self.map = TileMap(self.gridWidth, self.gridHeight)
+    self.score = {
+        ["time"] = 0,
+        ["colonized"] = 0,
+        ["trees connected"] = 0
+    }
 
     self:create()
 end
@@ -33,7 +38,7 @@ function TheWood:create()
 end
 
 --- Handle Mouse clicks all-over the screen
-function TheWood:mouseClickCallback(mouseX, mouseY, button, istouch)
+function TheWood:mouseActionCallback(mouseX, mouseY, button, istouch)
     if button == 1 then
         print("mouse pressed", button)
         -- broadcast mouse left button pressed
@@ -60,19 +65,30 @@ function TheWood:mouseClickCallback(mouseX, mouseY, button, istouch)
     end
 end
 
-function TheWood:update(dt)
-    function love.mousepressed(mouseX, mouseY, button, istouch)
-        self:mouseClickCallback(mouseX, mouseY, button, istouch)
-    end
-
+function TheWood:checkScore()
     for tilex, row in pairs(self.map.tiles) do
         -- print(tilex, row)
         -- for tiley in row do
         -- if self.state.colonized then
         --     -- discover neighbours (x+1, y), (x, y+1), (x+1, y+1)
-        -- end
+    end
+end
+
+
+function TheWood:update(dt)
+    -- player action handling
+    function love.mousereleased(mouseX, mouseY, button, istouch)
+        self:mouseActionCallback(mouseX, mouseY, button, istouch)
     end
 
+    function love.mousehover(mouseX, mouseY, button, istouch)
+        self:mouseActionCallback(mouseX, mouseY, button, istouch)
+    end
+
+    -- check state of the board and update scoreboard
+    self:checkScore()
+
+    -- reset mouse clicked check
     love.mouse.keysPressed = false
 end
 

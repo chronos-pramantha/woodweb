@@ -31,10 +31,17 @@ end
 
 function Tile:render()
     if self.state.colonized == true then
+        local image = nil
+        if self.id == TILE_IDS['grass'] then
+            image = ATLAS.sheet[TILE_IDS['colonized']]
+        else
+            image = ATLAS.sheet[self.id]
+        end
+        
         -- colonized tiles are full scale
         love.graphics.draw(
             ATLAS.image,
-            ATLAS.sheet[self.id],
+            image,
             (self.x - 1) * ATLAS.tilewidth,
             (self.y - 1) * ATLAS.tileheight,
             0,
