@@ -25,12 +25,19 @@ end
 
 --- Static method: switch tile state
 function TileState:switch(tile)
+    -- reclick on a colonized tile
+    if tile.state.colonized == true then
+        return
+    end
+
+    -- a neighbouring tile has been colonised
     if tile.state.discovered == false then
         print("switched to discovered")
         tile.state.discovered = true
         return "discovered"
     end
 
+    -- a discovered tile is being colonized
     if tile.state.discovered == true then
         -- water tiles cannot be colonized
         if tile.id ~= TILE_IDS["water"] then

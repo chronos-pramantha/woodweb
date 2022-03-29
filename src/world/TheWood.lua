@@ -41,7 +41,7 @@ end
 --- Handle Mouse clicks all-over the screen
 function TheWood:mouseActionCallback(mouseX, mouseY, button, istouch)
     if button == 1 then
-        print("mouse pressed", button)
+
         -- broadcast mouse left button pressed
         love.mouse.keysPressed = true
         -- compute clicked tile
@@ -57,14 +57,18 @@ function TheWood:mouseActionCallback(mouseX, mouseY, button, istouch)
 
         -- switch state of the tile if needed, see TileState
         switchedTo = TileState:switch(tile)
+        if switchedTo == nil then
+            return
+        end
         if switchedTo == 'colonized' then
             -- if tile switched to colonized, neighbours should be discovered
             self.map:discoverNeighbours(tile)
+            -- check sorrounded tiles
+            self.map:autoColonize(tile)
+            -- time passes
+            self.scores['time'] = self.scores['time'] + 1
         end
 
-        print(tile, tile.state)
-        currentMoveCount = self.scores['time']
-        self.scores['time'] = currentMoveCount + 1
     end
 end
 
@@ -100,12 +104,6 @@ function TheWood:update(dt)
     function love.mousereleased(mouseX, mouseY, button, istouch)
         self:mouseActionCallback(mouseX, mouseY, button, istouch)
     end
-
-    function love.mousehover(mouseX, mouseY, button, istouch)
-        self:mouseActionHover(mouseX, mouseY)
-    end
-
-    mousex, mousey = love.mouse.getPosition()
 
     -- check state of the board and update scoreboard
     self:checkScore()

@@ -52,8 +52,6 @@ function updateCounters(scores)
         tt = tt .. string.format('%s: %d\n', k, v)
     end
 
-    print(tt)
-
     return Textbox(
         QUADX * BOARD_SIZE + 15,
         475,
