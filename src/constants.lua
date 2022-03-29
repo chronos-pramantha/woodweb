@@ -14,12 +14,12 @@ ATLAS = Atlas('assets/basic_tiles_48x48x9__0_2.png', QUADX, QUADY)
 ATLAS:setSheet()
 
 TILE_IDS = {
-    ['covered'] = 7,
     ['grass'] = 1,
     ['colonized'] = 2,
+    ['stomps'] = 3,
     ['tree'] = 5,
-    ['carcass'] = 3,
-    ['water'] = 6
+    ['water'] = 6,
+    ['covered'] = 7
 }
 
 -- presence of bonuses/maluses
@@ -27,7 +27,7 @@ BONUS_DATA = {
     ['grass'] = 0.68,
     ['tree'] = 0.20,
     ['water'] = 0.12,
-    ['carcass'] = 0.02
+    ['stomps'] = 0.02
 }
 
 WOOD_DATA = {

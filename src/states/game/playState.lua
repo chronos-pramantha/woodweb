@@ -40,14 +40,33 @@ function playState:init()
         Fonts['medium']
     )
 
+    self.counters = nil
+
     -- phase counter
-    self.storytell = 1
+    self.storytellPhase = 1
+end
+
+function updateCounters(scores)
+    local tt = "\n"
+    for k, v in pairs(scores) do
+        tt = tt .. string.format('%s: %d\n', k, v)
+    end
+
+    print(tt)
+
+    return Textbox(
+        QUADX * BOARD_SIZE + 15,
+        475,
+        GUI_SIZE, 
+        WINDOW_HEIGHT - 475,
+        tt, 
+        Fonts['large']
+    )
 end
 
 function playState:update(dt)
     self.board:update(dt)
-    
-    love.keyboard.wasPressed = {}
+    self.counters = updateCounters(self.board.scores)
 end
 
 function playState:render()
@@ -57,4 +76,5 @@ function playState:render()
     self.storybox:render()
     self.hint:render()
     self.calltoaction:render()
+    self.counters:render()
 end

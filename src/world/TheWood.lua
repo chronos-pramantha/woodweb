@@ -9,10 +9,11 @@ function TheWood:init()
     self.gridHeight = WOOD_DATA['gridy']
 
     self.map = TileMap(self.gridWidth, self.gridHeight)
-    self.score = {
+    self.scores = {
         ["time"] = 0,
         ["colonized"] = 0,
-        ["trees connected"] = 0
+        ["trees connected"] = 0,
+        ["stomps connected"] = 0
     }
 
     self:create()
@@ -62,16 +63,35 @@ function TheWood:mouseActionCallback(mouseX, mouseY, button, istouch)
         end
 
         print(tile, tile.state)
+        currentMoveCount = self.scores['time']
+        self.scores['time'] = currentMoveCount + 1
     end
 end
 
+function TheWood:mouseActionHover(mouseX, mouseY)
+
+end
+
 function TheWood:checkScore()
-    for tilex, row in pairs(self.map.tiles) do
-        -- print(tilex, row)
-        -- for tiley in row do
-        -- if self.state.colonized then
-        --     -- discover neighbours (x+1, y), (x, y+1), (x+1, y+1)
+    local colonised = 0
+    local connected_trees = 0
+    local connected_stomps = 0
+    for _, row in pairs(self.map.tiles) do
+        for _, tiley in pairs(row) do
+            if tiley.state.discovered and tiley.state.colonized then
+                colonised = colonised + 1
+            end
+            if tiley.state.colonized and tiley.id == TILE_IDS['tree'] then
+                connected_trees = connected_trees + 1
+            end
+            if tiley.state.colonized and tiley.id == TILE_IDS['stomps'] then
+                connected_stomps = connected_stomps + 1
+            end
+        end
     end
+    self.scores['colonized'] = colonised
+    self.scores['trees connected'] = connected_trees
+    self.scores['stomps connected'] = connected_stomps
 end
 
 
@@ -82,8 +102,10 @@ function TheWood:update(dt)
     end
 
     function love.mousehover(mouseX, mouseY, button, istouch)
-        self:mouseActionCallback(mouseX, mouseY, button, istouch)
+        self:mouseActionHover(mouseX, mouseY)
     end
+
+    mousex, mousey = love.mouse.getPosition()
 
     -- check state of the board and update scoreboard
     self:checkScore()
