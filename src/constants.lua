@@ -10,13 +10,14 @@ WINDOW_WIDTH = QUADX * BOARD_SIZE + GUI_SIZE + 30
 WINDOW_HEIGHT = QUADY * BOARD_SIZE
 
 -- Load spritesheet as a global variable
-ATLAS = Atlas('assets/basic_tiles_48x48x9__0_3.png', QUADX, QUADY)
+ATLAS = Atlas('assets/basic_tiles_48x48x9__0_4.png', QUADX, QUADY)
 ATLAS:setSheet()
 
 TILE_IDS = {
     ['grass'] = 1,
     ['colonized'] = 2,
     ['stomps'] = 3,
+    ['tree colonized'] = 4,
     ['tree'] = 5,
     ['water'] = 6,
     ['covered'] = 7
@@ -55,3 +56,11 @@ function dump(o)
        return tostring(o)
     end
  end
+
+function table.shallow_copy(t)
+    local t2 = {}
+    for k,v in pairs(t) do
+        t2[k] = v
+    end
+    return t2
+end

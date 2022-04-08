@@ -1,17 +1,15 @@
-playState = Class{__includes = BaseState}
+overState = Class{__includes = BaseState}
 
 
---- main state of game
-function playState:init()
-    self.board = TheWood()
+--- game over state
+function overState:init()
 
-    -- print at screen
     self.title = Textbox(
         QUADX * BOARD_SIZE + 15,
         30,
         GUI_SIZE, 
         75,
-        storytellingLayout[1]["title"], 
+        "", 
         Fonts['large']
     )
 
@@ -20,7 +18,7 @@ function playState:init()
         110,
         GUI_SIZE, 
         200,
-        storytellingLayout[1]["story"], 
+        "", 
         Fonts['medium']
     )
 
@@ -29,7 +27,7 @@ function playState:init()
         315,
         GUI_SIZE, 
         75,
-        storytellingLayout[1]["hint"], 
+        "", 
         Fonts['medium']
     )
 
@@ -38,32 +36,27 @@ function playState:init()
         395,
         GUI_SIZE, 
         75,
-        storytellingLayout[1]["calltoaction"], 
+        "", 
         Fonts['medium']
     )
 
-    self.counters = nil
-
-    -- phase counter
-    self.storytellPhase = 1
-end
-
-function updateCountersPanel(scores)
-    -- index of scores keys
-    local iscores = {"moves left", "time", "colonized", "trees connected", "stomps connected"}
-    local tt = "\n"
-    for _, k in pairs(iscores) do
-        tt = tt .. string.format('%s: %d\n', k, scores[k])
-    end
-
-    return Textbox(
+    self.counters = Textbox(
         QUADX * BOARD_SIZE + 15,
         475,
         GUI_SIZE, 
         WINDOW_HEIGHT - 475,
-        tt, 
+        "Game Over :( Press Esc to restart", 
         Fonts['large']
     )
+end
+
+function overState:update(dt)
+    function love.keypressed(key)
+        if key == 'escape' then
+            gStateStack:pop(overState())
+            gStateStack:push(playState())
+        end
+    end
 end
 
 function playState:update(dt)
@@ -71,9 +64,7 @@ function playState:update(dt)
     self.counters = updateCountersPanel(self.board.scores)
 end
 
-function playState:render()
-    self.board:render()
-
+function overState:render()
     self.title:render()
     self.storybox:render()
     self.hint:render()

@@ -30,14 +30,10 @@ function love.keypressed(key)
 end
 
 function love.update(dt)
-
     Timer.update(dt)
     gStateStack:update(dt)
-
 end
 
 function love.draw()
-    push:start()
     gStateStack:render()
-    push:finish()
 end

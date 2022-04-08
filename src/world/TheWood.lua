@@ -9,7 +9,9 @@ function TheWood:init()
     self.gridHeight = WOOD_DATA['gridy']
 
     self.map = TileMap(self.gridWidth, self.gridHeight)
+
     self.scores = {
+        ["moves left"] = 7,  -- available moves
         ["time"] = 0,
         ["colonized"] = 0,
         ["trees connected"] = 0,
@@ -38,6 +40,28 @@ function TheWood:create()
     end
 end
 
+function TheWood:reset()
+    self.map = TileMap(self.gridWidth, self.gridHeight)
+    self:create()  
+end
+
+
+function TheWood:computeTileScore(tile)
+    -- if tree is colonized, add two moves
+    if tile.id == TILE_IDS["tree"] then
+        self.scores['moves left'] = self.scores['moves left'] + 1
+    elseif tile.id == TILE_IDS["stomps"] then
+        self.scores['moves left'] = self.scores['moves left'] + 3
+    else
+        self.scores['moves left'] = self.scores['moves left'] - 1
+        -- outof moves
+        if self.scores['moves left'] < 1 then
+            gStateStack:push(overState())
+            self:reset()
+        end
+    end
+end
+
 --- Handle Mouse clicks all-over the screen
 function TheWood:mouseActionCallback(mouseX, mouseY, button, istouch)
     if button == 1 then
@@ -45,7 +69,7 @@ function TheWood:mouseActionCallback(mouseX, mouseY, button, istouch)
         -- broadcast mouse left button pressed
         love.mouse.keysPressed = true
         -- compute clicked tile
-        tile = self.map:tileFromCoords(
+        local tile = self.map:tileFromCoords(
             love.mouse.getX(), 
             love.mouse.getY()
         )
@@ -67,13 +91,11 @@ function TheWood:mouseActionCallback(mouseX, mouseY, button, istouch)
             self.map:autoColonize(tile)
             -- time passes
             self.scores['time'] = self.scores['time'] + 1
+            -- compute score according to colonised tile
+            local t = table.shallow_copy(tile)
+            self:computeTileScore(t)
         end
-
     end
-end
-
-function TheWood:mouseActionHover(mouseX, mouseY)
-
 end
 
 function TheWood:checkScore()

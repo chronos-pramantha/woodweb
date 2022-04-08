@@ -11,6 +11,7 @@ require 'src/constants'
 require 'src/states/BaseState'
 require 'src/states/StateStack'
 require 'src/states/game/playState'
+require 'src/states/game/overState'
 require 'src/world/TheWood'
 
 require 'src/world/Tile'

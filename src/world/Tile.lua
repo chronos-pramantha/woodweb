@@ -34,6 +34,8 @@ function Tile:render()
         local image = nil
         if self.id == TILE_IDS['grass'] then
             image = ATLAS.sheet[TILE_IDS['colonized']]
+        elseif self.id == TILE_IDS['tree'] then
+            image = ATLAS.sheet[TILE_IDS['tree colonized']]
         else
             image = ATLAS.sheet[self.id]
         end
